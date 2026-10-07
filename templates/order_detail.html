@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Order #{{ order.id }}{% endblock %}
+{% block content %}
+  {% if placed %}
+    <p class="notice">Thank you! Your order has been placed.</p>
+  {% endif %}
+
+  <h1>Order #{{ order.id }}</h1>
+  <p class="muted">
+    {{ order.created_at.strftime("%d %b %Y, %H:%M") }} · Status: {{ order.status }}
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Product</th><th>Price</th><th>Quantity</th><th>Subtotal</th></tr>
+    </thead>
+    <tbody>
+      {% for item in order.items %}
+        <tr>
+          <td>{{ item.product.name }}</td>
+          <td>€{{ "%.2f"|format(item.price_at_purchase) }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>€{{ "%.2f"|format(item.price_at_purchase * item.quantity) }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <p class="total">Total: <strong>€{{ "%.2f"|format(order.total) }}</strong></p>
+  <p><a href="/orders">Back to my orders</a></p>
+{% endblock %}

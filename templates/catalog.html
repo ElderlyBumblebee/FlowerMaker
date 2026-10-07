@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Catalog{% endblock %}
+{% block content %}
+  <h1>Catalog</h1>
+  {% if message %}<p class="notice">{{ message }}</p>{% endif %}
+
+  <div class="grid">
+    {% for p in products %}
+      <div class="product {% if p.stock == 0 %}sold-out{% endif %}">
+        <h3>{{ p.name }}</h3>
+        <p class="description">{{ p.description }}</p>
+        <p class="muted">{{ p.colors | join(", ") }}</p>
+        <p class="price">€{{ "%.2f"|format(p.price) }}</p>
+
+        {% if p.stock == 0 %}
+          <p class="stock-out">Out of stock</p>
+        {% else %}
+          {% if p.stock <= 3 %}<p class="stock-low">Only {{ p.stock }} left</p>{% endif %}
+          <form action="/cart/add" method="post">
+            <input type="hidden" name="product_id" value="{{ p.id }}">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit">Add to cart</button>
+          </form>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

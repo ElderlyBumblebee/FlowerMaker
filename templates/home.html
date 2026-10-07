@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Welcome to FlowerMaker</h1>
+  {% if user %}
+    <p>You are logged in as <strong>{{ user.email }}</strong>.</p>
+  {% else %}
+    <p>Please <a href="/login">log in</a> or <a href="/register">register</a>.</p>
+  {% endif %}
+{% endblock %}

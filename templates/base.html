@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}FlowerMaker{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <a class="logo" href="/">FlowerMaker</a>
+    <nav>
+      <a href="/catalog">Catalog</a>
+      <a href="/assistant">Assistant</a>
+      <a href="/cart">Cart</a>
+      {% if user %}
+        <a href="/orders">My orders</a>
+        <span class="muted">{{ user.email }}</span>
+        <form action="/logout" method="post" class="inline">
+          <button type="submit">Log out</button>
+        </form>
+      {% else %}
+        <a href="/login">Log in</a>
+        <a href="/register">Register</a>
+      {% endif %}
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

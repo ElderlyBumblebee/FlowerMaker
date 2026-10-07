@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Flower assistant{% endblock %}
+{% block content %}
+  <h1>Flower assistant</h1>
+  <p>Tell me who the flowers are for, the occasion and your budget, and I'll pick the best options from what we have in stock.</p>
+
+  <form action="/assistant" method="get" class="card wide">
+    <label>What are you looking for?
+      <textarea name="q" rows="3" maxlength="500" required>{{ q }}</textarea>
+    </label>
+    <button type="submit">Ask the assistant</button>
+  </form>
+
+  <p class="muted">Try:
+    {% for ex in examples %}
+      <a href="/assistant?q={{ ex | urlencode }}">{{ ex }}</a>{% if not loop.last %} · {% endif %}
+    {% endfor %}
+  </p>
+
+  {% if result %}
+    {% if result.error %}
+      <p class="error">{{ result.error }}</p>
+    {% else %}
+      <div class="assistant-reply">{{ result.reply }}</div>
+
+      {% if result.products %}
+        <div class="grid">
+          {% for p in result.products %}
+            <div class="product">
+              <h3>{{ p.name }}</h3>
+              <p class="description">{{ p.description }}</p>
+              <p class="muted">{{ p.colors | join(", ") }}</p>
+              <p class="price">€{{ "%.2f"|format(p.price) }}</p>
+              <form action="/cart/add" method="post">
+                <input type="hidden" name="product_id" value="{{ p.id }}">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit">Add to cart</button>
+              </form>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{% endblock %}

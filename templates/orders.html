@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}My orders{% endblock %}
+{% block content %}
+  <h1>My orders</h1>
+
+  {% if not orders %}
+    <p>You have no orders yet. <a href="/catalog">Browse the catalog</a></p>
+  {% else %}
+    <table>
+      <thead>
+        <tr><th>Order</th><th>Date</th><th>Status</th><th>Total</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for o in orders %}
+          <tr>
+            <td>#{{ o.id }}</td>
+            <td>{{ o.created_at.strftime("%d %b %Y, %H:%M") }}</td>
+            <td>{{ o.status }}</td>
+            <td>€{{ "%.2f"|format(o.total) }}</td>
+            <td><a href="/orders/{{ o.id }}">Details</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endblock %}
